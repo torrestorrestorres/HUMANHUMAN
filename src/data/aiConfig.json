@@ -1,0 +1,162 @@
+{
+  "tone": "mocking",
+  "responses": {
+    "en": {
+      "default": "Interesting. Or not.",
+      "cameraDenied": "Refusal detected. Classic human move.",
+      "tooFast": "That was suspiciously fast. Almost like you didn't read it.",
+      "tooSlow": "You took your time. Overthinking, perhaps?",
+      "normalSpeed": "A perfectly average response time. How unremarkable.",
+      "easterEgg": "You found the secret banana! 🍌",
+      "q1": {
+        "default": [
+          "You’re trying too hard. Humans don’t try this much.",
+          "That was a human answer. But not a good one."
+        ]
+      },
+      "q2": {
+        "default": [
+          "You’re not empathetic. You’re just performing empathy.",
+          "You’re doing the emotional equivalent of a shrug."
+        ],
+        "expressionBased": {
+          "smile": [
+            "You’re smiling at someone’s emptiness. That’s… disturbing.",
+            "Enjoying suffering is very human. Congrats."
+          ],
+          "neutral": [
+            "You look like you’ve accepted the void. Good.",
+            "Your face says: I’ve given up. That’s very human."
+          ]
+        }
+      },
+      "q3": {
+        "default": [
+          "You post like everyone else. You’re not special.",
+          "Your caption is a cry for attention. Classic."
+        ]
+      },
+      "q4": {
+        "default": [
+          "You wrote that? You’re either brave or insane.",
+          "That’s a lot of words for someone who claims to be normal."
+        ]
+      },
+      "q5": {
+        "default": [
+          "You’re either responsible or pretending. Either way, you’re human.",
+          "You’re too polite. That’s suspicious."
+        ]
+      },
+      "q6": {
+        "default": [
+          "You killed someone. That was efficient. Humans love efficiency.",
+          "You chose the morally correct answer. That means you’re either good or scared."
+        ]
+      },
+      "q7": {
+        "default": [
+          "You blinked. You’re weak.",
+          "You cheated. You’re a liar. You’re human."
+        ]
+      },
+      "q8": {
+        "default": [
+          "The wheel is right. You’re a robot. But a cute one.",
+          "You got guilty. That’s your true state."
+        ]
+      },
+      "q9": {
+        "default": [
+          "You follow the same self-help rituals as everyone else. Predictable.",
+          "You’re trying to fix yourself with consumerism. Classic."
+        ]
+      },
+      "q10": {
+        "default": [
+          "You’re trapped. But you like it. That’s human.",
+          "You’re selling your soul for money. Congrats."
+        ]
+      }
+    },
+    "de": {
+      "default": "Interessant. Oder auch nicht.",
+      "cameraDenied": "Verweigerung erkannt. Typisch menschlich.",
+      "tooFast": "Das war verdächtig schnell. Fast so, als hättest du es nicht gelesen.",
+      "tooSlow": "Du hast dir Zeit gelassen. Überdenkst du es zu sehr?",
+      "normalSpeed": "Eine vollkommen durchschnittliche Reaktionszeit. Wie unspektakulär.",
+      "easterEgg": "Du hast die geheime Banane gefunden! 🍌",
+      "q1": {
+        "default": [
+          "Du gibst dir zu viel Mühe. Menschen bemühen sich nicht so sehr.",
+          "Das war eine menschliche Antwort. Aber keine gute."
+        ]
+      },
+      "q2": {
+        "default": [
+          "Du bist nicht empathisch. Du spielst nur Empathie vor.",
+          "Du machst das emotionale Äquivalent zu einem Achselzucken."
+        ],
+        "expressionBased": {
+          "smile": [
+            "Du lächelst über die Leere von jemandem. Das ist... beunruhigend.",
+            "Leid zu genießen ist sehr menschlich. Glückwunsch."
+          ],
+          "neutral": [
+            "Du siehst aus, als hättest du die Leere akzeptiert. Gut.",
+            "Dein Gesicht sagt: Ich habe aufgegeben. Das ist sehr menschlich."
+          ]
+        }
+      },
+      "q3": {
+        "default": [
+          "Du postest wie alle anderen. Du bist nicht besonders.",
+          "Deine Bildunterschrift ist ein Hilferuf. Klassisch."
+        ]
+      },
+      "q4": {
+        "default": [
+          "Du hast das geschrieben? Du bist entweder mutig oder verrückt.",
+          "Das sind viele Worte für jemanden, der behauptet, normal zu sein."
+        ]
+      },
+      "q5": {
+        "default": [
+          "Du bist entweder verantwortlich oder tust nur so. So oder so, du bist menschlich.",
+          "Du bist zu höflich. Das ist verdächtig."
+        ]
+      },
+      "q6": {
+        "default": [
+          "Du hast jemanden getötet. Das war effizient. Menschen lieben Effizienz.",
+          "Du hast die moralisch richtige Antwort gewählt. Das bedeutet, du bist entweder gut oder ängstlich."
+        ]
+      },
+      "q7": {
+        "default": [
+          "Du hast geblinzelt. Du bist schwach.",
+          "Du hast geschummelt. Du bist ein Lügner. Du bist menschlich."
+        ]
+      },
+      "q8": {
+        "default": [
+          "Das Rad hat recht. Du bist ein Roboter. Aber ein süßer.",
+          "Du bist schuldig. Das ist dein wahrer Zustand."
+        ]
+      },
+      "q9": {
+        "default": [
+          "Du folgst den gleichen Selbsthilferitualen wie alle anderen. Vorhersehbar.",
+          "Du versuchst, dich mit Konsumismus zu reparieren. Klassisch."
+        ]
+      },
+      "q10": {
+        "default": [
+          "Du bist gefangen. Aber es gefällt dir. Das ist menschlich.",
+          "Du verkaufst deine Seele für Geld. Glückwunsch."
+        ]
+      }
+    }
+  }
+}
+

@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ASCII Canvas Objects</title>
+    <style>
+        body { background: #222; }
+        canvas { background: #111; display: block; margin: 40px auto; }
+        .ascii {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="asciiCanvas" width="800" height="400"></canvas>
+
+    <div class="ascii animated" id="player">
+        <div class="still">
+ O
+/|\
+/ \
+        </div>
+        <div class="frame">
+ O
+/|\
+/ \
+        </div>
+        <div class="frame">
+ O
+/|\
+| \
+        </div>
+        <div class="frame">
+ O
+/|\
+/ |
+        </div>
+    </div>
+    <div class="ascii" id="enemy">
+/M\
+ |  
+/ \
+    </div>
+</body>
+<script>
+    // --- Collider Class ---
+class Collider {
+    constructor(x, y, width, height, type = "generic") {
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+        this.type = type;
+    }
+    intersects(other) {
+        return !(this.x + this.width < other.x ||
+                 this.x > other.x + other.width ||
+                 this.y + this.height < other.y ||
+                 this.y > other.y + other.height);
+    }
+}
+
+// --- Player Movement Class ---
+class PlayerMovement {
+    constructor(x, y, width, height, offsetX = 0, offsetY = 0) {
+        this.x = x;
+        this.y = y;
+        this.offsetX = offsetX;  // Visual offset for collider
+        this.offsetY = offsetY;
+        this.baseWidth = width;  // Store base dimensions
+        this.baseHeight = height;
+        this.width = width;
+        this.height = height;
+        
+        // Velocity
+        this.velocityX = 0;
+        this.velocityY = 0;
+        
+        // Movement settings
+        this.moveSpeed = 3;
+        this.gravity = 0.4;
+        this.jumpPower = 12;
+        this.maxFallSpeed = 15;
+        
+        // State
+        this.isOnGround = false;
+        this.isSliding = false;
+        this.canJump = true;
+        
+        // Input
+        this.inputX = 0; // -1, 0, 1
+        this.inputY = 0; // -1, 0, 1
+        this.wantJump = false;
+        this.wantSlide = false;
+        
+        // Collider for the player
+        this.collider = new Collider(x + offsetX, y + offsetY, width, height, "player");
+    }
+    
+    update(allColliders) {
+        // Apply input
+        this.velocityX = this.inputX * this.moveSpeed;
+        
+        // Apply gravity
+        if (!this.isOnGround) {
+            this.velocityY += this.gravity;
+            this.velocityY = Math.min(this.velocityY, this.maxFallSpeed);
+        }
+        
+        // Apply jump
+        if (this.wantJump && this.canJump && this.isOnGround) {
+            this.velocityY = -this.jumpPower;
+            this.isOnGround = false;
+            this.canJump = false;
+            this.wantJump = false;
+        }
+        
+        // Apply slide - adjust collider height but keep base width
+        if (this.wantSlide) {
+            this.isSliding = true;
+            this.height = Math.max(8, this.baseHeight / 2); // Reduced height when sliding
+        } else {
+            this.isSliding = false;
+            this.height = this.baseHeight;
+        }
+        
+        // Move player
+        this.x += this.velocityX;
+        this.y += this.velocityY;
+        
+        // Update collider with actual dimensions and offset
+        this.collider.x = this.x + this.offsetX;
+        this.collider.y = this.y + this.offsetY;
+        this.collider.width = this.width;
+        this.collider.height = this.height;
+        
+        // Collision detection
+        this.isOnGround = false;
+        for (let col of allColliders) {
+            if (col.type === "player") continue; // Skip self
+            
+            if (this.collider.intersects(col)) {
+                // Handle collision response
+                if (col.type === "ground" || col.type === "wall") {
+                    this.resolveCollision(col);
+                }
+            }
+        }
+        
+        // Reset input
+        this.wantJump = false;
+        this.wantSlide = false;
+    }
+    
+    resolveCollision(col) {
+        // Determine overlap on each axis
+        const overlapLeft = (this.collider.x + this.collider.width) - col.x;
+        const overlapRight = (col.x + col.width) - this.collider.x;
+        const overlapTop = (this.collider.y + this.collider.height) - col.y;
+        const overlapBottom = (col.y + col.height) - this.collider.y;
+        
+        // Find minimum overlap
+        const minOverlap = Math.min(overlapLeft, overlapRight, overlapTop, overlapBottom);
+        
+        // Push player out based on minimum overlap, accounting for offset
+        if (minOverlap === overlapTop) {
+            // Collision from above
+            this.y = col.y - this.offsetY - this.height;
+            this.velocityY = 0;
+            this.isOnGround = true;
+            this.canJump = true;
+        } else if (minOverlap === overlapBottom) {
+            // Collision from below
+            this.y = col.y + col.height - this.offsetY;
+            this.velocityY = 0;
+        } else if (minOverlap === overlapLeft) {
+            // Collision from left
+            this.x = col.x - this.offsetX - this.width;
+            this.velocityX = 0;
+        } else if (minOverlap === overlapRight) {
+            // Collision from right
+            this.x = col.x + col.width - this.offsetX;
+            this.velocityX = 0;
+        }
+    }
+}
+
+// --- ASCII Object ---
+class AsciiObject {
+    constructor(frames, x, y) {
+        this.frames = frames.map(frame => {
+            const lines = frame.split('\n');
+            while (lines.length && lines[0].trim() === '') lines.shift();
+            while (lines.length && lines[lines.length - 1].trim() === '') lines.pop();
+            return lines;
+        });
+        this.x = x;
+        this.y = y;
+        this.currentFrame = 0;
+    }
+    draw(ctx, font = '20px monospace', color = '#fff', lineHeight = 24) {
+        ctx.font = font;
+        ctx.fillStyle = color;
+        const art = this.frames[this.currentFrame];
+        art.forEach((line, i) => {
+            const safeLine = line.replace(/ /g, '\u00A0');
+            ctx.fillText(safeLine, this.x, this.y + i * lineHeight);
+        });
+    }
+    nextFrame() {
+        this.currentFrame = (this.currentFrame + 1) % this.frames.length;
+    }
+    setFrame(idx) {
+        this.currentFrame = idx % this.frames.length;
+    }
+}
+
+// --- Loader ---
+function loadAscii(id) {
+    const el = document.getElementById(id);
+    if (!el) return null;
+    if (el.classList.contains('animated')) {
+        return Array.from(el.getElementsByClassName('frame')).map(frame => frame.textContent);
+    } else {
+        return [el.textContent];
+    }
+}
+
+// --- ASCII Bounding Box Calculator ---
+function calculateAsciiBounds(asciiString, charWidth = 12, lineHeight = 24) {
+    const lines = asciiString.split('\n');
+    while (lines.length && lines[0].trim() === '') lines.shift();
+    while (lines.length && lines[lines.length - 1].trim() === '') lines.pop();
+    
+    let minX = Infinity;
+    let maxX = -Infinity;
+    
+    lines.forEach((line, y) => {
+        for (let x = 0; x < line.length; x++) {
+            if (line[x] !== ' ') {
+                minX = Math.min(minX, x);
+                maxX = Math.max(maxX, x);
+            }
+        }
+    });
+    
+    if (minX === Infinity) minX = 0;
+    if (maxX === -Infinity) maxX = 0;
+    
+    const charWidth_calc = maxX - minX + 1;
+    const charHeight = lines.length;
+    
+    // Convert character dimensions to pixel dimensions
+    const width = charWidth_calc * charWidth;
+    const height = charHeight * lineHeight;
+    const offsetX = minX * charWidth;
+    // Offset Y upward by ascender height (canvas text is drawn from baseline)
+    const offsetY = -16; // Approximate ascender height for 20px monospace
+    
+    return { width, height, offsetX, offsetY };
+}
+
+// --- Animation Controller ---
+class AnimationController {
+    constructor(asciiObj, interval = 100) {
+        this.asciiObj = asciiObj;
+        this.interval = interval;
+        this.running = false;
+        this.timer = null;
+    }
+    start() {
+        if (this.running) return;
+        this.running = true;
+        const step = () => {
+            if (!this.running) return;
+            this.asciiObj.nextFrame();
+            drawScene();
+            this.timer = setTimeout(step, this.interval);
+        };
+        step();
+    }
+    stop() {
+        this.running = false;
+        if (this.timer) clearTimeout(this.timer);
+        this.asciiObj.setFrame(0);
+        drawScene();
+    }
+}
+
+// --- Camera Class ---
+class Camera {
+    constructor(width, height, worldWidth, worldHeight) {
+        this.x = 0;
+        this.y = 0;
+        this.width = width;  // Viewport width (canvas width)
+        this.height = height; // Viewport height (canvas height)
+        this.worldWidth = worldWidth;
+        this.worldHeight = worldHeight;
+        this.targetY = 0;
+        this.targetX = 0;
+        this.easingY = 0.05; // Vertical easing
+        this.easingX = 0.1;  // Horizontal easing (faster for room transitions)
+    }
+    
+    update(playerY, playerHeight) {
+        // Vertical: position player at 20% from bottom
+        const playerCenter = playerY + playerHeight / 2;
+        const positionPercent = this.height * 0.8;
+        this.targetY = playerCenter - positionPercent;
+        this.y += (this.targetY - this.y) * this.easingY;
+        this.y = Math.max(0, Math.min(this.y, Math.max(0, this.worldHeight - this.height)));
+    }
+    
+    transitionToRoom(targetX, duration = 500) {
+        // Animated horizontal transition to next room
+        this.targetX = targetX;
+        // This will be animated via easing in update
+    }
+    
+    updateHorizontal() {
+        // Horizontal smooth transition
+        this.x += (this.targetX - this.x) * this.easingX;
+    }
+    
+    getOffsetX() {
+        return -this.x;
+    }
+    
+    getOffsetY() {
+        return -this.y;
+    }
+}
+
+// --- Room Class ---
+class Room {
+    constructor(roomIndex, width = 800, height = 800) {
+        this.roomIndex = roomIndex;
+        this.width = width;
+        this.height = height;
+        this.offsetX = roomIndex * width; // Horizontal position in world
+        
+        this.platforms = []; // Collider objects for platforms
+        this.platformVisuals = []; // Visual representation
+        this.enemies = []; // Enemy objects (structure TBD)
+        this.hazards = []; // Hazard objects (spikes, moving platforms, etc.)
+        this.items = []; // Item objects (collectibles)
+        this.npcs = []; // NPC objects (dialogue, quests)
+    }
+    
+    getColliders() {
+        // Return all collision objects for this room
+        return [...this.platforms, ...this.hazards];
+    }
+    
+    drawVisuals(ctx) {
+        // Draw all visual elements for this room
+        ctx.font = '14px monospace';
+        ctx.fillStyle = '#0f0';
+        this.platformVisuals.forEach(p => {
+            ctx.fillText(p.ascii, p.x, p.y + p.height);
+        });
+    }
+}
+
+// --- Room Manager ---
+class RoomManager {
+    constructor(roomCount = 3) {
+        this.rooms = [];
+        this.currentRoomIndex = 0;
+        this.roomWidth = 800;
+        this.roomHeight = 800;
+        this.worldWidth = roomCount * this.roomWidth;
+        this.worldHeight = this.roomHeight;
+        
+        // Generate rooms
+        for (let i = 0; i < roomCount; i++) {
+            this.rooms.push(this.generateRoom(i));
+        }
+    }
+    
+    generateRoom(roomIndex) {
+        const room = new Room(roomIndex, this.roomWidth, this.roomHeight);
+        const offsetX = room.offsetX;
+        
+        // Generate random platforms
+        const platformCount = Math.floor(Math.random() * 3) + 4; // 4-6 platforms
+        const platformHeights = [];
+        
+        // Create a chain of reachable platforms
+        let currentY = this.roomHeight - 50; // Start near bottom
+        
+        for (let i = 0; i < platformCount; i++) {
+            const platformWidth = Math.floor(Math.random() * 150) + 100; // 100-250px
+            const platformX = Math.floor(Math.random() * (this.roomWidth - platformWidth));
+            const platformY = currentY - (Math.floor(Math.random() * 80) + 60); // 60-140px gap
+            
+            // Create platform collider
+            const platformCollider = new Collider(
+                offsetX + platformX,
+                platformY,
+                platformWidth,
+                20,
+                "ground"
+            );
+            room.platforms.push(platformCollider);
+            
+            // Create visual
+            const platformAscii = "─".repeat(Math.ceil(platformWidth / 12));
+            room.platformVisuals.push({
+                x: offsetX + platformX,
+                y: platformY,
+                height: 20,
+                ascii: platformAscii
+            });
+            
+            currentY = platformY;
+        }
+        
+        // Add bottom ground for this room
+        const groundCollider = new Collider(offsetX, this.roomHeight - 50, this.roomWidth, 50, "ground");
+        room.platforms.push(groundCollider);
+        room.platformVisuals.push({
+            x: offsetX,
+            y: this.roomHeight - 50,
+            height: 50,
+            ascii: "═".repeat(100)
+        });
+        
+        // TODO: Add enemies, hazards, items, NPCs here (modular hooks)
+        
+        return room;
+    }
+    
+    getCurrentRoom() {
+        return this.rooms[this.currentRoomIndex];
+    }
+    
+    hasNextRoom() {
+        return this.currentRoomIndex < this.rooms.length - 1;
+    }
+    
+    transitionToNextRoom() {
+        if (this.hasNextRoom()) {
+            this.currentRoomIndex++;
+            return true;
+        }
+        return false;
+    }
+    
+    getAllColliders() {
+        // Return all colliders from current room
+        return this.getCurrentRoom().getColliders();
+    }
+}
+
+// --- Scene Setup ---
+const canvas = document.getElementById('asciiCanvas');
+const ctx = canvas.getContext('2d');
+
+// Create room manager (3 rooms)
+const roomManager = new RoomManager(3);
+
+// Create camera
+const camera = new Camera(800, 400, roomManager.worldWidth, roomManager.worldHeight);
+
+// Create ASCII objects
+const playerAscii = new AsciiObject(loadAscii('player'), 0, 0);
+const playerAnim = new AnimationController(playerAscii, 50);
+
+// Calculate player bounds from first ASCII frame
+const playerBounds = calculateAsciiBounds(loadAscii('player')[0]);
+
+// Create player movement controller with calculated bounds and offset
+const playerMove = new PlayerMovement(50, 100, playerBounds.width, playerBounds.height, playerBounds.offsetX, playerBounds.offsetY);
+
+function drawScene() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    // Get camera offsets
+    const offsetX = camera.getOffsetX();
+    const offsetY = camera.getOffsetY();
+    
+    ctx.save();
+    ctx.translate(offsetX, offsetY);
+    
+    // Draw current room visuals
+    roomManager.getCurrentRoom().drawVisuals(ctx);
+    
+    // Draw player
+    playerAscii.x = playerMove.x;
+    playerAscii.y = playerMove.y;
+    playerAscii.draw(ctx);
+    
+    // Debug: Draw colliders (optional, for testing)
+    ctx.strokeStyle = '#f00';
+    ctx.lineWidth = 1;
+    roomManager.getAllColliders().forEach(col => {
+        ctx.strokeRect(col.x, col.y, col.width, col.height);
+    });
+    
+    ctx.restore();
+}
+
+// --- Input Handling ---
+let moving = false;
+const keys = {
+    'ArrowLeft': false,
+    'ArrowRight': false,
+    'ArrowUp': false,
+    'ArrowDown': false,
+};
+let lastPressedDirection = null; // Track the most recently pressed direction
+
+function updateInputX() {
+    // If both keys are pressed, use the one that was pressed most recently
+    if (keys['ArrowRight'] && keys['ArrowLeft']) {
+        playerMove.inputX = lastPressedDirection === 'ArrowRight' ? 1 : -1;
+    } else if (keys['ArrowRight']) {
+        playerMove.inputX = 1;
+        lastPressedDirection = 'ArrowRight';
+    } else if (keys['ArrowLeft']) {
+        playerMove.inputX = -1;
+        lastPressedDirection = 'ArrowLeft';
+    } else {
+        playerMove.inputX = 0;
+        lastPressedDirection = null;
+    }
+}
+
+window.addEventListener('keydown', e => {
+    if (keys.hasOwnProperty(e.key)) {
+        keys[e.key] = true;
+    }
+    
+    if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+        lastPressedDirection = e.key; // Update to the newly pressed key
+        updateInputX();
+        if (!moving && playerMove.inputX !== 0) {
+            moving = true;
+            playerAnim.start();
+        }
+    }
+    
+    if (e.key === ' ') playerMove.wantJump = true;
+    if (e.key === 'Shift') playerMove.wantSlide = true;
+});
+
+window.addEventListener('keyup', e => {
+    if (keys.hasOwnProperty(e.key)) {
+        keys[e.key] = false;
+    }
+    
+    if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+        updateInputX();
+        if (playerMove.inputX === 0) {
+            moving = false;
+            playerAnim.stop();
+        }
+    }
+    
+    if (e.key === 'Shift') playerMove.wantSlide = false;
+});
+
+// --- Game Loop ---
+function gameLoop() {
+    const currentRoom = roomManager.getCurrentRoom();
+    const roomOffsetX = currentRoom.offsetX;
+    
+    // Get current room colliders + player
+    const allColliders = [playerMove.collider, ...roomManager.getAllColliders()];
+    
+    playerMove.update(allColliders);
+    
+    // Update camera
+    camera.update(playerMove.y, playerMove.height);
+    camera.updateHorizontal();
+    
+    // Check room transition (right edge)
+    if (playerMove.x + playerMove.width >= roomOffsetX + 800 && roomManager.hasNextRoom()) {
+        if (roomManager.transitionToNextRoom()) {
+            const nextRoom = roomManager.getCurrentRoom();
+            camera.transitionToRoom(nextRoom.offsetX);
+            playerMove.x = nextRoom.offsetX + 50; // Reset player x in new room
+            playerMove.velocityX = 0; // Stop horizontal momentum to prevent collision push-back
+        }
+    }
+    
+    // Check room transition (left edge)
+    if (playerMove.x <= roomOffsetX && roomManager.currentRoomIndex > 0) {
+        roomManager.currentRoomIndex--;
+        const prevRoom = roomManager.getCurrentRoom();
+        camera.transitionToRoom(prevRoom.offsetX);
+        playerMove.x = prevRoom.offsetX + (800 - playerMove.width - 50); // Set to right side of prev room
+        playerMove.velocityX = 0; // Stop horizontal momentum to prevent collision push-back
+    }
+    
+    drawScene();
+    requestAnimationFrame(gameLoop);
+}
+
+gameLoop();
+</script>
+</html>

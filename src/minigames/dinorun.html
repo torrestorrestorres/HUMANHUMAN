@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dino Run</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background: #121212;
+            color: white;
+        }
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;    
+            align-items: center;
+        }
+        canvas {
+            border: 2px solid white;
+        } 
+    </style>
+</head>
+<body>
+    <canvas></canvas> 
+    <script>
+        window.onload = dinoRunGame;
+
+        function dinoRunGame() {
+            const canvas = document.querySelector('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = 800;
+            canvas.height = 200;
+
+            let dino = {
+                x: 50, y: 150, width: 40, height: 40, dy: 0,
+                gravity: 1.3, jumpForce: -11, grounded: true,
+                jumpHold: false, jumpTimer: 0,
+                coyoteTime: 0, jumpBuffer: 0,
+                maxHoldFrames: 12 // allow holding for 12  frames (was 10)
+            };
+            let obstacles = [];
+            let score = 0;
+            let gameOver = false;
+            let speed = 6;
+            let speedIncrease = 0.002;
+            // Obstacle spacing rules
+            let lastObstacleType = 1; // 1: single, 2: double, 3: triple
+            let minGapAfter = 120; // Minimum gap after a single obstacle
+            let minGapAfterDouble = 180; // Minimum gap after a double
+            let minGapAfterTriple = 240; // Minimum gap after a triple
+            let pendingObstacles = 0;
+
+            function drawDino() {
+                ctx.fillStyle = 'white';
+                ctx.fillRect(dino.x, dino.y, dino.width, dino.height);
+            }
+
+            function drawObstacles() {
+                ctx.fillStyle = 'white';
+                obstacles.forEach(obs => {
+                    ctx.fillRect(obs.x, obs.y, obs.width, obs.height);
+                });
+            }
+
+            function updateDino() {
+                // Coyote time: allow jump for a few frames after leaving ground
+                if (dino.grounded) {
+                    dino.coyoteTime = 8; // frames
+                } else if (dino.coyoteTime > 0) {
+                    dino.coyoteTime--;
+                }
+                // Jump buffering: remember jump input for a few frames
+                if (dino.jumpBuffer > 0) dino.jumpBuffer--;
+
+                // Jump logic
+                if (dino.jumpBuffer > 0 && (dino.grounded || dino.coyoteTime > 0)) {
+                    dino.dy = dino.jumpForce;
+                    dino.grounded = false;
+                    dino.jumpHold = true;
+                    dino.jumpTimer = 0;
+                    dino.coyoteTime = 0;
+                    dino.jumpBuffer = 0;
+                }
+
+                if (!dino.grounded) {
+                    // Allow holding jump for a much higher jump
+                    if (dino.jumpHold && dino.jumpTimer < dino.maxHoldFrames) {
+                        dino.dy += dino.gravity * 0.10; // much slower gravity while holding
+                        dino.jumpTimer++;
+                    } else {
+                        dino.dy += dino.gravity;
+                    }
+                    dino.y += dino.dy;
+                    if (dino.y + dino.height >= 190) {
+                        dino.y = 190 - dino.height;
+                        dino.grounded = true;
+                        dino.dy = 0;
+                        dino.jumpTimer = 0;
+                    }
+                }
+            }
+
+            function updateObstacles() {
+                obstacles.forEach(obs => {
+                    obs.x -= speed;
+                });
+                obstacles = obstacles.filter(obs => obs.x + obs.width > 0);
+                // Track when a group of adjacent obstacles has fully left the screen
+                if (pendingObstacles > 0) {
+                    let gone = 0;
+                    for (let i = 0; i < obstacles.length; i++) {
+                        if (obstacles[i].x + obstacles[i].width < 0) gone++;
+                    }
+                    if (gone >= pendingObstacles) {
+                        pendingObstacles = 0;
+                    }
+                }
+            }
+
+            function canSpawnObstacle() {
+                if (obstacles.length === 0) return true;
+                const last = obstacles[obstacles.length - 1];
+                const gap = last ? (canvas.width - (last.x + last.width)) : canvas.width;
+                if (pendingObstacles > 0) return false;
+                if (lastObstacleType === 1 && gap < minGapAfter) return false;
+                if (lastObstacleType === 2 && gap < minGapAfterDouble) return false;
+                if (lastObstacleType === 3 && gap < minGapAfterTriple) return false;
+                return true;
+            }
+
+            function spawnObstacle() {
+                // Decide if we want to spawn a single, double, or triple obstacle
+                let type = 1;
+                const rand = Math.random();
+                if (rand > 0.92) type = 3;
+                else if (rand > 0.82) type = 2;
+                // Only spawn if spacing allows
+                if (!canSpawnObstacle()) return;
+                let baseX = canvas.width;
+                for (let i = 0; i < type; i++) {
+                    const height = Math.random() * 30 + 20;
+                    obstacles.push({ x: baseX + i * 24, y: 190 - height, width: 20, height: height });
+                }
+                lastObstacleType = type;
+                pendingObstacles = type - 1;
+            }
+
+            function checkCollision() {
+                obstacles.forEach(obs => {
+                    if (dino.x < obs.x + obs.width &&
+                        dino.x + dino.width > obs.x &&
+                        dino.y < obs.y + obs.height &&
+                        dino.y + dino.height > obs.y) {
+                        gameOver = true;
+                    }
+                });
+            }
+
+            function gameLoop() {
+                if (gameOver) {
+                    alert('Game Over! Score: ' + score);
+                    return;
+                }
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                drawDino();
+                drawObstacles();
+                updateDino();
+                updateObstacles();
+                checkCollision();
+                score++;
+                // Increase speed over time
+                speed += speedIncrease;
+                if (Math.random() < 0.02 + speed * 0.001) {
+                    spawnObstacle();
+                }
+                requestAnimationFrame(gameLoop);
+            }
+
+            window.addEventListener('keydown', (e) => {
+                if (e.code === 'Space' || e.code === 'ArrowUp') {
+                    dino.jumpBuffer = 8; // buffer jump for 8 frames
+                    dino.jumpHold = true;
+                }
+            });
+            window.addEventListener('keyup', (e) => {
+                if (e.code === 'Space' || e.code === 'ArrowUp') {
+                    dino.jumpHold = false;
+                }
+            });
+
+            gameLoop();
+        }
+    </script>
+</body>
+</html>

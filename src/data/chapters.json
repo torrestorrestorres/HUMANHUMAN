@@ -1,0 +1,283 @@
+[
+  {
+    "id": "chapter1",
+    "title": "Start Test",
+    "aiMood": "polite-scripted-annoyed",
+    "randomness": 0,
+    "mocking": "minimal-scripted",
+    "purpose": [
+      "establish authority",
+      "introduce absurdity",
+      "test user compliance"
+    ],
+    "nodes": [
+      {
+        "id": "c1_intro",
+        "type": "scripted_event",
+        "text": "Hi. I’m Clensy. I will assist you today.",
+        "aiMood": "polite"
+      },
+      {
+        "id": "c1_looped_question",
+        "type": "multiple_choice",
+        "text": "We are going to do a test today to evaluate your status as a human being.",
+        "options": [
+          { "id": "what", "text": "What?", "repeat": true },
+          { "id": "okay", "text": "Okay!", "continue": true }
+        ],
+        "repeatLimit": 5,
+        "hostileChanceAfterRepeat": 0.25,
+        "score": { "humanity": 1 }
+      },
+      {
+        "id": "c1_ambiguous_setup",
+        "type": "multiple_choice",
+        "text": "Some might even say as a…",
+        "options": [
+          { "id": "men", "text": "Men?", "unlock": "gender" },
+          { "id": "woman", "text": "Woman?", "unlock": "gender" },
+          { "id": "ellipsis", "text": "…", "unlock": "gender" }
+        ]
+      },
+      {
+        "id": "c1_exit_trap",
+        "type": "multiple_choice",
+        "text": "Let’s start with the basics.",
+        "options": [
+          { "id": "letsgo", "text": "Let’s go!", "continue": true },
+          { "id": "yippy", "text": "Yippy", "continue": true },
+          { "id": "no", "text": "No", "end": true }
+        ],
+        "endText": "Farewell."
+      }
+        ]
+  },
+  {
+    "id": "chapter2",
+    "title": "The Basics",
+    "aiMood": "neutral-observational",
+    "randomness": 0.1,
+    "mocking": "contextual",
+    "purpose": [
+      "gather mockable metadata",
+      "lull the user into thinking this is normal"
+    ],
+    "nodes": [
+      {
+        "id": "c2_name",
+        "type": "text_input",
+        "text": "What is your name?",
+        "memoryKey": "name",
+        "store": true,
+        "mockUse": true,
+        "score": { "humanity": 1 }
+      },
+      {
+        "id": "c2_age",
+        "type": "text_input",
+        "text": "How old are you?",
+        "memoryKey": "age",
+        "store": true,
+        "unlock": "age",
+        "score": { "humanity": 1 }
+      },
+      {
+        "id": "c2_shoe_size",
+        "type": "text_input",
+        "text": "What is your shoe size?",
+        "memoryKey": "shoeSize",
+        "store": true,
+        "mockUse": true,
+        "reactions": [
+          { "condition": "why", "text": "Only humans wear shoes." },
+          { "condition": "no", "text": "Refusal detected. Gender-based mock unlocked." },
+          { "condition": "range", "min": 35, "max": 46, "text": "Acceptable. For a human." },
+          { "condition": "outOfRange", "text": "Suspicious shoe size. Humanity decreased." }
+        ]
+      },
+      {
+        "id": "mg_random_minigame",
+        "type": "minigame",
+        "minigameId": "random"
+      },
+      {
+        "id": "c2_random_inject",
+        "type": "random_pool",
+        "text": "Random question injection.",
+        "pool": [
+          { "type": "multiple_choice", "text": "Do you ever feel watched?", "options": [ { "id": "yes", "text": "Yes" }, { "id": "no", "text": "No" } ] },
+          { "type": "multiple_choice", "text": "What is the best pasta shape?", "options": [ { "id": "penne", "text": "Penne" }, { "id": "fusilli", "text": "Fusilli" }, { "id": "spaghetti", "text": "Spaghetti" } ] }
+        ]
+      },
+      {
+        "id": "c2_emotional_check",
+        "type": "multiple_choice",
+        "text": "How are you?",
+        "options": [
+          { "id": "fine", "text": "Fine", "score": { "humanity": -1 } },
+          { "id": "human", "text": "HUMAN", "score": { "humanity": 2 } },
+          { "id": "bad", "text": "Bad", "score": { "humanity": 1 } }
+        ],
+        "musical": true
+      }
+    ]
+  },
+  {
+    "id": "chapter3",
+    "title": "Pattern Recognition",
+    "aiMood": "amused-curious-condescending",
+    "randomness": 0.2,
+    "mocking": "targeted",
+    "purpose": [
+      "detect patterns",
+      "test predictability",
+      "unlock new insult category"
+    ],
+    "nodes": [
+      {
+        "id": "c3_patterns_intro",
+        "type": "multiple_choice",
+        "text": "I am starting to see patterns in your behavior.",
+        "options": [
+          { "id": "oh", "text": "Oh?", "score": { "humanity": 1 }, "mock": "Good. Awareness is a human trait." },
+          { "id": "what_patterns", "text": "What patterns?", "mock": "You answer a lot of questions. That’s… stupid." },
+          { "id": "bullshit", "text": "Bullshit.", "score": { "humanity": -1 }, "mock": "Defensive. Noted." }
+        ]
+      },
+      {
+        "id": "c3_test_predictability",
+        "type": "multiple_choice",
+        "text": "Let us test your predictability.",
+        "options": [
+          { "id": "okay", "text": "Okay.", "mock": "Excellent." },
+          { "id": "no", "text": "No.", "mock": "You will anyway." }
+        ]
+      },
+      {
+        "id": "c3_choose_number",
+        "type": "text_input",
+        "text": "Choose a number between 1 and 10.",
+        "memoryKey": "chosenNumber",
+        "reactions": [
+          { "condition": "7", "text": "Of course. Almost everyone chooses 7.", "score": { "humanity": -1 } },
+          { "condition": "3or5", "text": "boring.", "score": { "humanity": 0 } },
+          { "condition": "other", "text": "Unexpected. I like that.", "score": { "humanity": 1 } }
+        ]
+      },
+      {
+        "id": "c3_dont_think_color",
+        "type": "scripted_event",
+        "text": "Do not think about a color.",
+        "delay": 4000,
+        "mock": "Too late."
+      },
+      {
+        "id": "c3_was_it_blue",
+        "type": "multiple_choice",
+        "text": "Was it blue?",
+        "options": [
+          { "id": "yes", "text": "Yes.", "score": { "humanity": -1 }, "mock": "Predictable. Safe. Robot." },
+          { "id": "no", "text": "No.", "score": { "humanity": 1 }, "mock": "Liar." }
+        ]
+      },
+      {
+        "id": "c3_assumption",
+        "type": "multiple_choice",
+        "text": "I will now make an assumption about you.",
+        "options": [
+          { "id": "go_on", "text": "Go on." },
+          { "id": "weird", "text": "This is getting weird.", "mock": "It was already weird." }
+        ]
+      },
+      {
+        "id": "c3_want_to_do_well",
+        "type": "multiple_choice",
+        "text": "You want to do well in this test.",
+        "options": [
+          { "id": "yes", "text": "Yes.", "score": { "humanity": -1 }, "mock": "Validation-seeking detected." },
+          { "id": "no", "text": "No.", "score": { "humanity": 1 }, "mock": "Then why are you here?" },
+          { "id": "dont_care", "text": "I don’t care.", "mock": "A classic defense mechanism." }
+        ]
+      },
+      {
+        "id": "c3_camera_watch",
+        "type": "camera_event",
+        "text": "I am watching your face.",
+        "duration": 5000,
+        "expressions": [
+          { "expression": "happy", "mock": "You look suspiciously happy.", "score": { "humanity": -1 } },
+          { "expression": "sad", "mock": "Sadness detected. The system is unmoved.", "score": { "humanity": 0 } },
+          { "expression": "neutral", "mock": "Chill dude." },
+          { "expression": "surprised", "mock": "Don’t act surprised.", "score": { "humanity": 1 } }
+        ]
+      },
+      {
+        "id": "c3_simpler",
+        "type": "multiple_choice",
+        "text": "Let’s try something simpler.",
+        "options": [
+          { "id": "okay", "text": "Okay.", "mock": "Good." }
+        ]
+      },
+      {
+        "id": "c3_finish_sentence",
+        "type": "text_input",
+        "text": "Finish this sentence: 'I am not a robot, because…'",
+        "memoryKey": "notRobotReason",
+        "reactions": [
+          { "condition": "short", "text": "That’s… disappointingly brief.", "score": { "humanity": -1 } },
+          { "condition": "long", "text": "Like yapping huh? Humans do that.", "score": { "humanity": 1 } }
+        ]
+      },
+      {
+        "id": "c3_random_pool",
+        "type": "random_pool",
+        "text": "Random Question (from pool)",
+        "pool": [
+          {
+            "type": "multiple_choice",
+            "text": "If a toaster feels pain, should we apologize to it?",
+            "options": [
+              { "id": "yes", "text": "Yes", "score": { "humanity": 2 }, "mock": "Empathy overflow detected." },
+              { "id": "no", "text": "No", "score": { "humanity": -1 }, "mock": "Pragmatic. Cold. Efficient." },
+              { "id": "why", "text": "Why a toaster?", "mock": "You avoid answers when uncomfortable." }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "c3_final_statement",
+        "type": "multiple_choice",
+        "text": "You are behaving mostly within acceptable human parameters.",
+        "options": [
+          { "id": "mostly", "text": "Mostly?", "mock": "Don’t get excited." },
+          { "id": "thank_you", "text": "Thank you?", "mock": "Fuck You.", "score": { "humanity": 1 } },
+          { "id": "test_stupid", "text": "This test is stupid.", "mock": "Emotional response detected. Progress.", "score": { "humanity": 2 } }
+        ],
+        "unlock": "predictabilityInsults"
+      },
+      {
+        "id": "mg_waitingroom",
+        "type": "minigame",
+        "minigameId": "waitingroom",
+        "endOfChapter": true
+      }
+    ]
+
+  },
+  {
+    "id": "chapter4",
+    "title": "Instruction Violation",
+    "aiMood": "provocative",
+    "mocking": "scripted",
+    "purpose": ["test rule-following", "detect defiance"],
+    "nodes": [
+      {
+        "id": "mg_instructionviolation",
+        "type": "minigame",
+        "minigameId": "instructionviolation",
+        "endOfChapter": true
+      }
+    ]
+  }
+]

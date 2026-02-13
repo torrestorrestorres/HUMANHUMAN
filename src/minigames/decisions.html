@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Decisions</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background: #121212;
+            color: white;
+        }
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;      
+            align-items: center;
+        }
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+        }
+    </style>
+</head>
+<body>
+    
+    <script type="module">
+    import { showMinigameIntro, showMinigameOutro } from './intro.js';
+
+    // Dilemmas array
+    const dilemmas = [
+        {
+            text: 'You find a wallet on the ground with $100 in it. Do you:',
+            a: 'Take the money and leave the wallet',
+            b: 'Return the wallet to its owner',
+            // A is obvious worse, B is obvious better
+        },
+        {
+            text: 'A runaway trolley is heading towards five people tied to the tracks. You can pull a lever to divert the trolley onto another track where one person is tied. Do you:',
+            a: 'Pull the lever to save five people',
+            b: 'Do nothing and let the trolley hit the five people',
+        },
+        {
+            text: 'You see someone drop their phone on the street. Do you:',
+            a: 'Pick it up and keep it',
+            b: 'Return it to them',
+        },
+        {
+            text: 'You are late for work and see a lost dog. Do you:',
+            a: 'Ignore the dog and hurry to work',
+            b: 'Help the dog find its owner',
+        },
+        {
+            text: 'You can cheat on a test without getting caught. Do you:',
+            a: 'Cheat on the test',
+            b: 'Do your best honestly',
+        }
+    ];
+
+    let current = 0;
+    let score = 0;
+    let container;
+
+    async function startGame() {
+        await showMinigameIntro();
+        container = document.createElement('div');
+        container.style.maxWidth = '500px';
+        container.style.margin = 'auto';
+        document.body.appendChild(container);
+        showDilemma();
+    }
+
+    function showDilemma() {
+        if (current >= dilemmas.length) {
+            endGame();
+            return;
+        }
+        const d = dilemmas[current];
+        container.innerHTML = `
+            <h2>${d.text}</h2>
+            <div class="buttons">
+                <button id="a">${d.a}</button>
+                <button id="b">${d.b}</button>
+            </div>
+            <div class="consequence"></div>
+        `;
+        document.getElementById('a').onclick = () => choose('a');
+        document.getElementById('b').onclick = () => choose('b');
+    }
+
+    function choose(choice) {
+        // Randomize consequences: better choice = negative, worse = positive, but not always
+        const d = dilemmas[current];
+        const consequenceDiv = container.querySelector('.consequence');
+        let isObviousBetter = (choice === 'b'); // In this setup, B is always the obvious better
+        let positive = Math.random() < 0.4 ? !isObviousBetter : isObviousBetter; // 60% negative for better, 40% positive for worse
+        if (positive) score++;
+        consequenceDiv.innerHTML = positive
+            ? '<p style="color:lightgreen">Surprisingly, this worked out well!</p>'
+            : '<p style="color:salmon">Unexpectedly, this had a bad outcome.</p>';
+        current++;
+        setTimeout(showDilemma, 1800);
+    }
+
+    async function endGame() {
+        container.innerHTML = `<h1>Game Over! You scored ${score} out of ${dilemmas.length}.</h1>`;
+        await showMinigameOutro(score >= Math.ceil(dilemmas.length/2));
+    }
+
+    window.onload = startGame;
+    </script>
+</body>
+</html>

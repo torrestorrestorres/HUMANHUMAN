@@ -1,0 +1,169 @@
+
+{
+  "en": {
+    "introTitle": "ARE YOU HUMAN?",
+    "beginEvaluation": "Begin Evaluation",
+    "analysisComplete": "Analysis Complete",
+    "unknownMinigame": "Unknown minigame.",
+    "q1": {
+        "prompt": "Prove you’re human. What do you do?",
+        "opt1": "Cry dramatically for validation",
+        "opt2": "Pretend I don’t care, but secretly care",
+        "opt3": "Answer honestly and accept the pain",
+        "opt4": "Upload a cat picture and call it a day"
+    },
+  "q2": {
+    "prompt": "Someone says they feel empty. What do you say?",
+    "opt1": "Same. Want to talk?",
+    "opt2": "Maybe you just need a hobby.",
+    "opt3": "Have you tried breathing?",
+    "opt4": "I don’t care.",
+    "smile": "You’re smiling while someone is empty. Cute.",
+    "neutral": "You look like you’ve accepted your emptiness."
+  },
+  "q3": {
+    "prompt": "You post a picture. What’s the caption?",
+    "opt1": "Just vibing",
+    "opt2": "I’m fine.",
+    "opt3": "If you know, you know.",
+    "opt4": "I hate everyone."
+  },
+  "q4": {
+    "prompt": "Write the first thing that comes to your mind."
+  },
+  "q5": {
+    "prompt": "You break something. What do you do?",
+    "opt1": "Apologize and replace it",
+    "opt2": "Blame someone else",
+    "opt3": "Pretend it never happened",
+    "opt4": "Laugh and walk away"
+  },
+  "q6": {
+    "prompt": "Mini-game: The trolley problem."
+  },
+  "q7": {
+    "prompt": "Mini-game: Blink test."
+  },
+  "q8": {
+    "prompt": "Mini-game: Moral roulette."
+  },
+  "q9": {
+    "prompt": "What do you do when you feel lost?",
+    "opt1": "Buy a self-help book",
+    "opt2": "Talk to someone",
+    "opt3": "Listen to a podcast",
+    "opt4": "Pretend I’m fine"
+  },
+  "q10": {
+    "prompt": "How do you feel about your job?",
+    "opt1": "I love it",
+    "opt2": "It pays",
+    "opt3": "It’s a prison",
+    "opt4": "It’s my identity"
+  },
+  "m1": {
+    "title": "Trolley Problem",
+    "text": "A train is coming. Choose.",
+    "opt1": "Kill one",
+    "opt2": "Kill five",
+    "opt3": "Do nothing"
+  },
+  "m2": {
+    "title": "Blink Test",
+    "text": "Don’t blink for 10 seconds.",
+    "cheat": "I blinked (lie)"
+  },
+  "m3": {
+    "title": "Moral Roulette",
+    "text": "Spin the wheel of ethics.",
+    "spin": "Spin",
+    "robot": "The wheel says: You are a robot.",
+    "human": "The wheel says: You are human.",
+    "absurd": "The wheel says: You are absurd.",
+    "guilty": "The wheel says: You are guilty."
+  }
+  },
+  "de": {
+    "introTitle": "BIST DU MENSCH?",
+    "beginEvaluation": "Bewertung starten",
+    "analysisComplete": "Analyse abgeschlossen",
+    "unknownMinigame": "Unbekanntes Minispiel.",
+    "q1": {
+        "prompt": "Beweise, dass du ein Mensch bist. Was tust du?",
+        "opt1": "Dramatisch um Bestätigung weinen",
+        "opt2": "So tun, als ob es mir egal ist, aber insgeheim kümmern",
+        "opt3": "Ehrlich antworten und den Schmerz akzeptieren",
+        "opt4": "Ein Katzenbild hochladen und es dabei belassen"
+    },
+    "q2": {
+    "prompt": "Jemand sagt, er fühlt sich leer. Was sagst du?",
+    "opt1": "Gleichfalls. Willst du reden?",
+    "opt2": "Vielleicht brauchst du einfach ein Hobby.",
+    "opt3": "Hast du schon mal versucht zu atmen?",
+    "opt4": "Das ist mir egal.",
+    "smile": "Du lächelst, während sich jemand leer fühlt. Niedlich.",
+    "neutral": "Du siehst aus, als hättest du deine Leere akzeptiert."
+    },
+    "q3": {
+    "prompt": "Du postest ein Bild. Was ist die Bildunterschrift?",
+    "opt1": "Einfach nur am Chillen",
+    "opt2": "Mir geht’s gut.",
+    "opt3": "Wer es weiß, der weiß es.",
+    "opt4": "Ich hasse alle."
+    },
+    "q4": {
+    "prompt": "Schreibe das erste, was dir in den Sinn kommt."
+    },
+    "q5": { 
+    "prompt": "Du zerbrichst etwas. Was tust du?",
+    "opt1": "Entschuldigen und ersetzen",
+    "opt2": "Jemand anderem die Schuld geben",
+    "opt3": "So tun, als ob es nie passiert wäre",
+    "opt4": "Lachen und weggehen"
+    },
+    "q6": {
+    "prompt": "Minispiel: Das Trolley-Problem."
+    },
+    "q7": {
+    "prompt": "Minispiel: Blinzeltest."
+    },
+    "q8": {
+    "prompt": "Minispiel: Moralroulette."
+    },
+    "q9": {
+    "prompt": "Was tust du, wenn du dich verloren fühlst?",
+    "opt1": "Ein Selbsthilfebuch kaufen",
+    "opt2": "Mit jemandem reden",
+    "opt3": "Einen Podcast hören",
+    "opt4": "So tun, als ob es mir gut geht"
+    },
+    "q10": {
+    "prompt": "Wie fühlst du dich bei deinem Job?",
+    "opt1": "Ich liebe ihn",
+    "opt2": "Er zahlt",
+    "opt3": "Es ist ein Gefängnis",
+    "opt4": "Es ist meine Identität"
+    },  
+    "m1": {
+    "title": "Trolley-Problem",
+    "text": "Ein Zug kommt. Wähle.",
+    "opt1": "Einen töten",
+    "opt2": "Fünf töten",   
+    "opt3": "Nichts tun"
+    },  
+    "m2": {
+    "title": "Blinzeltest",
+    "text": "Blinke 10 Sekunden lang nicht.",
+    "cheat": "Ich habe geblinzelt (lüge)"
+    },
+    "m3": {
+    "title": "Moralroulette",
+    "text": "Drehe das Rad der Ethik.",
+    "spin": "Drehen",
+    "robot": "Das Rad sagt: Du bist ein Roboter.",
+    "human": "Das Rad sagt: Du bist ein Mensch.",
+    "absurd": "Das Rad sagt: Du bist absurd.",  
+    "guilty": "Das Rad sagt: Du bist schuldig."
+    }
+  }
+}

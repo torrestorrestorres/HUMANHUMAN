@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Is Human?</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background: #121212;
+            color: white;
+        }
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;    
+            align-items: center;
+        }
+        .buttons {
+            display: none;
+            justify-content: space-between;
+        }
+    </style>
+</head>
+<body>
+        <div class="human">
+            <div class="img-container"></div>
+            <div class="buttons">
+                <button onclick="human()">Human</button>
+                <button onclick="notHuman()">not Human</button>
+            </div>
+            <div class="answer"></div>
+        </div>
+
+        <script type="module">
+            import { showMinigameIntro, showMinigameOutro } from './intro.js';
+
+            let imagesSeen = 0;
+            let score = 0;
+            const maxImages = 5;
+
+            async function startGame() {
+                await showMinigameIntro();
+                imagesSeen = 0;
+                score = 0;
+                document.querySelector('.buttons').style.display = 'flex';
+                gameLoop();
+            }
+
+            function gameLoop() {
+                imagesSeen++;
+                const imgContainer = document.querySelector('.img-container');
+                const answerContainer = document.querySelector('.answer');
+                const buttonsContainer = document.querySelector('.buttons');
+
+                // End game after X images
+                if (imagesSeen > maxImages) {
+                    imgContainer.innerHTML = '';
+                    answerContainer.innerHTML = `<h1>Game Over! You have got ${score} correct answers.</h1>`;
+                    buttonsContainer.style.display = 'none';
+                    showMinigameOutro(score >= Math.ceil(maxImages/2));
+                    return;
+                }
+
+                imgContainer.innerHTML = '';
+                answerContainer.innerHTML = '';
+                const isHuman = Math.random() < 0.5;
+                const img = document.createElement('img');
+                // for image in /humans folder use random image from 1 to 10
+                const randomIndex = Math.floor(Math.random() * 10) + 1;
+                img.src = isHuman ? `humans/human${randomIndex}.png` : `humans/not_human${randomIndex}.jpg`;
+                img.style.filter = `brightness(${100 - (imagesSeen * 5)}%)`;
+                img.style.filter += ` contrast(${100 - (imagesSeen * 5)}%)`;
+                img.style.filter += ` grayscale(100%)`;
+                img.style.width = '300px';
+                img.style.height = '300px';
+                imgContainer.appendChild(img);
+                imgContainer.setAttribute('data-is-human', isHuman);
+            }
+
+            window.human = function() {
+                const imgContainer = document.querySelector('.img-container');
+                const answerContainer = document.querySelector('.answer');
+                const isHuman = imgContainer.getAttribute('data-is-human') === 'true';
+                if (isHuman) {
+                    score++;
+                    answerContainer.innerHTML = '<h2 style="color: green;">Correct! It is a Human.</h2>';
+                } else {
+                    answerContainer.innerHTML = '<h2 style="color: red;">Wrong! It is not a Human.</h2>';
+                }
+                setTimeout(gameLoop, 2000);
+            }
+
+            window.notHuman = function() {
+                const imgContainer = document.querySelector('.img-container');
+                const answerContainer = document.querySelector('.answer');
+                const isHuman = imgContainer.getAttribute('data-is-human') === 'true';
+                if (!isHuman) {
+                    score++;
+                    answerContainer.innerHTML = '<h2 style="color: green;">Correct! It is not a Human.</h2>';
+                } else {
+                    answerContainer.innerHTML = '<h2 style="color: red;">Wrong! It is a Human.</h2>';
+                }
+                setTimeout(gameLoop, 2000);
+            }
+
+            window.onload = startGame;
+        </script>
+
+</body>
+</html>

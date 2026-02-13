@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slot Machine</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background: #121212;
+            color: white;
+        }
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .slot-container {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .slot {
+            width: 80px;
+            height: 80px;
+            border: 4px solid white;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2.5rem;
+            background: #222;
+        }
+
+        .spin-btn:active {
+            background: #2D3139;
+        }
+    </style>
+</head>
+<body>
+    <div class="slot-container">
+        <div class="slot" id="slot1">🍉</div>
+        <div class="slot" id="slot2">⭐</div>
+        <div class="slot" id="slot3">7️⃣</div>
+    </div>
+    <button class="spin-btn" id="spinBtn">Spin</button>
+
+    <script>
+        const symbols = ["🍉", "⭐", "7️⃣", "🍋", "🍒", "🔔", "🍀"];
+        const slots = [
+            document.getElementById('slot1'),
+            document.getElementById('slot2'),
+            document.getElementById('slot3')
+        ];
+        const spinDuration = 1000; // 1 Sekunde
+
+        function checkWin(finalSymbols) {
+            if (finalSymbols[0] === finalSymbols[1] && finalSymbols[1] === finalSymbols[2]) {
+                alert("Gewonnen! 🎉");
+            }
+        }
+
+        document.getElementById('spinBtn').addEventListener('click', () => {
+            const btn = document.getElementById('spinBtn');
+            btn.disabled = true;
+            let finished = 0;
+            let finalSymbols = [];
+            slots.forEach((slot, i) => {
+                spinSlot(slot, symbols, spinDuration, 30, 30, () => {
+                    // Speichere das finale Symbol
+                    finalSymbols[i] = slot.textContent;
+                    finished++;
+                    if (finished === slots.length) {
+                        btn.disabled = false;
+                        checkWin(finalSymbols);
+                    }
+                });
+            });
+        });
+        function spinSlot(slot, symbols, duration, initialInterval, intervalStep, done) {
+            let elapsed = 0;
+            let interval = initialInterval;
+
+            function spin() {
+                const randomSymbol = symbols[Math.floor(Math.random() * symbols.length)];
+                slot.textContent = randomSymbol;
+                elapsed += interval;
+                interval += intervalStep;
+                if (elapsed < duration) {
+                    setTimeout(spin, interval);
+                } else {
+                    // Endgültiges Symbol setzen
+                    const finalSymbol = symbols[Math.floor(Math.random() * symbols.length)];
+                    slot.textContent = finalSymbol;
+                    if (done) done();
+                }
+            }
+            spin();
+        }
+
+
+    </script>
+</body>
+</html>

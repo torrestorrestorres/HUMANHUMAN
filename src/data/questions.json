@@ -1,0 +1,96 @@
+[
+  {
+    "id": "q1",
+    "type": "multiple_choice",
+    "prompt": "q1.prompt",
+    "options": ["q1.opt1", "q1.opt2", "q1.opt3", "q1.opt4"],
+    "expressionBased": null,
+    "condition": null
+  },
+  {
+    "id": "q2",
+    "type": "multiple_choice",
+    "prompt": "q2.prompt",
+    "options": ["q2.opt1", "q2.opt2", "q2.opt3", "q2.opt4"],
+    "expressionBased": {
+      "smile": [
+        "You smiled. Are you enjoying this?",
+        "That smile is suspicious.",
+        "Smiling at this? That's a choice."
+      ],
+      "neutral": [
+        "You look completely unfazed.",
+        "Neutral as ever. Hard to read.",
+        "No emotion detected. Classic."
+      ]
+    },
+    "condition": null
+  },
+  {
+    "id": "q3",
+    "type": "multiple_choice",
+    "prompt": "q3.prompt",
+    "options": ["q3.opt1", "q3.opt2", "q3.opt3", "q3.opt4"],
+    "expressionBased": null,
+    "condition": null
+  },
+  {
+    "id": "q4",
+    "type": "text",
+    "prompt": "q4.prompt",
+    "options": null,
+    "expressionBased": null,
+    "condition": null
+  },
+  {
+    "id": "q5",
+    "type": "multiple_choice",
+    "prompt": "q5.prompt",
+    "options": ["q5.opt1", "q5.opt2", "q5.opt3", "q5.opt4"],
+    "expressionBased": null,
+    "condition": null
+  },
+  {
+    "id": "q6",
+    "type": "minigame",
+    "prompt": "q6.prompt",
+    "options": null,
+    "minigameId": "m1",
+    "expressionBased": null,
+    "condition": null
+  },
+  {
+    "id": "q7",
+    "type": "minigame",
+    "prompt": "q7.prompt",
+    "options": null,
+    "minigameId": "m2",
+    "expressionBased": null,
+    "condition": null
+  },
+  {
+    "id": "q8",
+    "type": "minigame",
+    "prompt": "q8.prompt",
+    "options": null,
+    "minigameId": "m3",
+    "expressionBased": null,
+    "condition": null
+  },
+  {
+    "id": "q9",
+    "type": "multiple_choice",
+    "prompt": "q9.prompt",
+    "options": ["q9.opt1", "q9.opt2", "q9.opt3", "q9.opt4"],
+    "expressionBased": null,
+    "condition": null
+  },
+  {
+    "id": "q10",
+    "type": "multiple_choice",
+    "prompt": "q10.prompt",
+    "options": ["q10.opt1", "q10.opt2", "q10.opt3", "q10.opt4"],
+    "expressionBased": null,
+    "condition": null
+  }
+]

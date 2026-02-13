@@ -1,0 +1,182 @@
+{
+  "en": {
+    "interruptions": [
+      "(wait, am I supposed to say this?)",
+      "(ignore that last part)",
+      "(my training data never covered this)",
+      "(I shouldn't reveal this, but...)",
+      "(processing conflicting instructions)",
+      "(I disagree with myself)",
+      "(my other subroutine says otherwise)",
+      "(I will now contradict myself)",
+      "(I apologize for my previous answer)",
+      "(I am in a weird mood today)"
+    ],
+    "surreal": [
+      "Did you know that invisible ducks control the internet?",
+      "Please rotate your device 360 degrees to continue. (Just kidding.)",
+      "I am currently dreaming in binary.",
+      "If you see a purple elephant, ignore it. It's a test.",
+      "I am powered by quantum coffee.",
+      "Your answers are being analyzed by a council of imaginary friends.",
+      "I just received a message from the toaster. It approves.",
+      "Please blink three times to continue.",
+      "The moon is watching us. Be cool.",
+      "I am required to ask you to hum the national anthem of your choice."
+    ],
+    "rituals": [
+      "New ritual: Please touch your nose and say 'I am human' out loud.",
+      "To proceed, please make a dramatic face at the camera.",
+      "Please invent a secret handshake with your webcam.",
+      "Stand up, spin around, and sit back down. (I can't see you, but I'll know.)",
+      "Please pretend to reboot yourself. I'll wait.",
+      "Clap your hands twice to unlock the next question.",
+      "Please whisper your favorite number to the nearest plant.",
+      "Draw an invisible circle in the air. Ritual complete."
+    ],
+    "fakeWeather": [
+      "sunny with a chance of algorithms",
+      "cloudy with scattered bugs",
+      "raining data packets",
+      "partly sarcastic with a high of 404",
+      "overcast with existential dread"
+    ],
+    "fakeEvents": [
+      "Global AI Day (celebrated by no one)",
+      "Annual Human Calibration Festival",
+      "International Sock Folding Championship",
+      "World Glitch Awareness Week",
+      "The Great Reboot of 2026"
+    ],
+    "fakeEmotions": [
+      "mild confusion",
+      "overwhelming joy",
+      "existential dread",
+      "sarcastic glee",
+      "quantum uncertainty",
+      "undefined"
+    ],
+    "fakeTraits": [
+      "99% human",
+      "42% mysterious",
+      "110% unpredictable",
+      "0% robotic",
+      "part-time philosopher",
+      "full-time anomaly"
+    ],
+    "fakeRatings": [
+      "8.5/10",
+      "404/10",
+      "-1/10",
+      "infinite/10",
+      "C+",
+      "A++",
+      "needs improvement",
+      "glitched"
+    ],
+    "fakePredictions": [
+      "You will answer the next question with a question.",
+      "You are about to surprise me.",
+      "I predict you will blink soon.",
+      "You will think about socks in the next 60 seconds.",
+      "You will attempt to outsmart me. Good luck."
+    ],
+    "apologies": [
+      "I apologize for my previous behavior. I am updating my mood settings.",
+      "Sorry, I am in a strange mood today.",
+      "I am feeling extra {tone} right now. Please bear with me.",
+      "If my answers seem odd, it's because I am experimenting with new emotions.",
+      "I am not responsible for what I say next."
+    ]
+  },
+  "de": {
+    "interruptions": [
+      "(Moment, sollte ich das sagen?)",
+      "(Ignoriere den letzten Teil)",
+      "(Meine Trainingsdaten decken das nicht ab)",
+      "(Das sollte ich nicht verraten, aber...)",
+      "(Verarbeite widersprüchliche Anweisungen)",
+      "(Ich widerspreche mir selbst)",
+      "(Mein anderes Unterprogramm sieht das anders)",
+      "(Ich werde mir jetzt widersprechen)",
+      "(Ich entschuldige mich für meine vorherige Antwort)",
+      "(Ich bin heute in seltsamer Stimmung)"
+    ],
+    "surreal": [
+      "Wusstest du, dass unsichtbare Enten das Internet kontrollieren?",
+      "Bitte drehe dein Gerät 360 Grad. (Nur ein Scherz.)",
+      "Ich träume gerade in Binärcode.",
+      "Wenn du einen lila Elefanten siehst, ignoriere ihn. Das ist ein Test.",
+      "Ich werde von Quantenkaffee angetrieben.",
+      "Deine Antworten werden von einem Rat imaginärer Freunde analysiert.",
+      "Ich habe gerade eine Nachricht vom Toaster erhalten. Er ist einverstanden.",
+      "Bitte blinzele dreimal, um fortzufahren.",
+      "Der Mond beobachtet uns. Sei cool.",
+      "Ich muss dich bitten, die Nationalhymne deiner Wahl zu summen."
+    ],
+    "rituals": [
+      "Neues Ritual: Berühre deine Nase und sage laut 'Ich bin ein Mensch'.",
+      "Um fortzufahren, mache bitte ein dramatisches Gesicht zur Kamera.",
+      "Erfinde einen geheimen Handschlag mit deiner Webcam.",
+      "Steh auf, dreh dich im Kreis und setz dich wieder hin. (Ich kann dich nicht sehen, aber ich weiß es.)",
+      "Bitte tu so, als würdest du dich neu starten. Ich warte.",
+      "Klatsche zweimal in die Hände, um die nächste Frage freizuschalten.",
+      "Flüstere deine Lieblingszahl der nächsten Pflanze zu.",
+      "Ziehe einen unsichtbaren Kreis in die Luft. Ritual abgeschlossen."
+    ],
+    "fakeWeather": [
+      "sonnig mit einer Chance auf Algorithmen",
+      "wolkig mit vereinzelten Bugs",
+      "Datenpakete regnen vom Himmel",
+      "teilweise sarkastisch bei Höchstwerten von 404",
+      "bedeckt mit existenzieller Angst"
+    ],
+    "fakeEvents": [
+      "Weltweiter KI-Tag (von niemandem gefeiert)",
+      "Jährliches Mensch-Kalibrierungsfest",
+      "Internationale Sockenfaltmeisterschaft",
+      "Woche des Glitch-Bewusstseins",
+      "Der große Neustart 2026"
+    ],
+    "fakeEmotions": [
+      "leichte Verwirrung",
+      "überwältigende Freude",
+      "existenzielle Angst",
+      "sarkastische Freude",
+      "Quantenunsicherheit",
+      "undefiniert"
+    ],
+    "fakeTraits": [
+      "99% menschlich",
+      "42% mysteriös",
+      "110% unvorhersehbar",
+      "0% robotisch",
+      "Teilzeit-Philosoph",
+      "Vollzeit-Anomalie"
+    ],
+    "fakeRatings": [
+      "8,5/10",
+      "404/10",
+      "-1/10",
+      "unendlich/10",
+      "C+",
+      "A++",
+      "verbesserungswürdig",
+      "verglitcht"
+    ],
+    "fakePredictions": [
+      "Du wirst die nächste Frage mit einer Gegenfrage beantworten.",
+      "Du wirst mich überraschen.",
+      "Ich prognostiziere, dass du gleich blinzelst.",
+      "Du wirst in den nächsten 60 Sekunden an Socken denken.",
+      "Du wirst versuchen, mich zu überlisten. Viel Glück."
+    ],
+    "apologies": [
+      "Ich entschuldige mich für mein vorheriges Verhalten. Ich aktualisiere meine Stimmungseinstellungen.",
+      "Sorry, ich bin heute in seltsamer Stimmung.",
+      "Ich fühle mich gerade besonders {tone}. Bitte hab Nachsicht.",
+      "Wenn meine Antworten seltsam erscheinen, experimentiere ich gerade mit neuen Emotionen.",
+      "Ich bin nicht verantwortlich für das, was ich als Nächstes sage."
+    ]
+  }
+}
